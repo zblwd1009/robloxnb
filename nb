@@ -1,0 +1,176 @@
+local PlayerGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+
+-- 创建主界面
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "PowerLegacyExpandableUI"
+screenGui.Parent = PlayerGui
+
+-- 小图标按钮（初始状态）
+local iconButton = Instance.new("ImageButton")
+iconButton.Name = "ExpandIcon"
+iconButton.Size = UDim2.new(0, 50, 0, 50)
+iconButton.Position = UDim2.new(0, 20, 0.5, -25)
+iconButton.Image = "rbxassetid://123456789" -- 替换为你的图标ID
+iconButton.BackgroundTransparency = 1
+iconButton.Parent = screenGui
+
+-- 主窗口框架（初始隐藏）
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0.9, 0, 0.9, 0)
+mainFrame.Position = UDim2.new(0.05, 0, 0.05, 0)
+mainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
+mainFrame.BorderSizePixel = 0
+mainFrame.Visible = false
+mainFrame.Parent = screenGui
+
+-- 标题栏
+local titleBar = Instance.new("Frame")
+titleBar.Name = "TitleBar"
+titleBar.Size = UDim2.new(1, 0, 0.08, 0)
+titleBar.Position = UDim2.new(0, 0, 0, 0)
+titleBar.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+titleBar.Parent = mainFrame
+
+local titleText = Instance.new("TextLabel")
+titleText.Name = "TitleText"
+titleText.Size = UDim2.new(0.8, 0, 1, 0)
+titleText.Position = UDim2.new(0.1, 0, 0, 0)
+titleText.Text = "力量传奇脚本中心"
+titleText.TextColor3 = Color3.fromRGB(0, 200, 255)
+titleText.Font = Enum.Font.GothamBold
+titleText.TextSize = 20
+titleText.BackgroundTransparency = 1
+titleText.Parent = titleBar
+
+-- 关闭按钮
+local closeButton = Instance.new("TextButton")
+closeButton.Name = "CloseButton"
+closeButton.Size = UDim2.new(0.08, 0, 1, 0)
+closeButton.Position = UDim2.new(0.92, 0, 0, 0)
+closeButton.Text = "X"
+closeButton.TextColor3 = Color3.fromRGB(255, 100, 100)
+closeButton.Font = Enum.Font.GothamBold
+closeButton.TextSize = 20
+closeButton.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
+closeButton.Parent = titleBar
+
+-- 内容区域
+local contentFrame = Instance.new("Frame")
+contentFrame.Name = "ContentFrame"
+contentFrame.Size = UDim2.new(1, -20, 0.85, -10)
+contentFrame.Position = UDim2.new(0, 10, 0.1, 5)
+contentFrame.BackgroundTransparency = 1
+contentFrame.Parent = mainFrame
+
+-- 创建选项卡
+local tabButtons = Instance.new("Frame")
+tabButtons.Name = "TabButtons"
+tabButtons.Size = UDim2.new(1, 0, 0.08, 0)
+tabButtons.BackgroundTransparency = 1
+tabButtons.Parent = contentFrame
+
+local tabs = {"脚本中心", "汉化工具", "辅助功能", "设置"}
+local tabFrames = {}
+
+for i, tabName in ipairs(tabs) do
+    -- 选项卡按钮
+    local tabButton = Instance.new("TextButton")
+    tabButton.Name = tabName.."Tab"
+    tabButton.Size = UDim2.new(0.24, -5, 1, 0)
+    tabButton.Position = UDim2.new((i-1)*0.25, 0, 0, 0)
+    tabButton.Text = tabName
+    tabButton.TextColor3 = Color3.fromRGB(200, 200, 200)
+    tabButton.Font = Enum.Font.GothamMedium
+    tabButton.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
+    tabButton.Parent = tabButtons
+    
+    -- 选项卡内容框架
+    local tabFrame = Instance.new("ScrollingFrame")
+    tabFrame.Name = tabName.."Frame"
+    tabFrame.Size = UDim2.new(1, 0, 0.92, 0)
+    tabFrame.Position = UDim2.new(0, 0, 0.08, 0)
+    tabFrame.BackgroundTransparency = 1
+    tabFrame.Visible = (i == 1) -- 默认显示第一个选项卡
+    tabFrame.ScrollingEnabled = true
+    tabFrame.CanvasSize = UDim2.new(0, 0, 2, 0) -- 可滚动内容
+    tabFrame.Parent = contentFrame
+    
+    tabFrames[i] = tabFrame
+    
+    -- 按钮点击事件
+    tabButton.MouseButton1Click:Connect(function()
+        for _, frame in ipairs(tabFrames) do
+            frame.Visible = false
+        end
+        tabFrame.Visible = true
+        
+        -- 更新按钮状态
+        for _, btn in ipairs(tabButtons:GetChildren()) do
+            if btn:IsA("TextButton") then
+                btn.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
+            end
+        end
+        tabButton.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
+    end)
+end
+
+-- 添加一些示例内容到第一个选项卡
+local scriptOptions = {
+    "伐木大亨-KronHub",
+    "力量传奇-KTM(1版)",
+    "力量传奇-KTM(2版)",
+    "力量传奇-Tokatik",
+    "力量传奇-不知道",
+    "自动挖矿脚本",
+    "自动战斗辅助",
+    "资源收集工具"
+}
+
+for i, scriptName in ipairs(scriptOptions) do
+    local scriptFrame = Instance.new("Frame")
+    scriptFrame.Name = "Script_"..i
+    scriptFrame.Size = UDim2.new(1, -10, 0, 50)
+    scriptFrame.Position = UDim2.new(0, 5, 0, (i-1)*60)
+    scriptFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
+    scriptFrame.Parent = tabFrames[1]
+    
+    local scriptText = Instance.new("TextLabel")
+    scriptText.Name = "ScriptText"
+    scriptText.Size = UDim2.new(0.7, 0, 1, 0)
+    scriptText.Position = UDim2.new(0, 10, 0, 0)
+    scriptText.Text = scriptName
+    scriptText.TextColor3 = Color3.fromRGB(255, 255, 255)
+    scriptText.Font = Enum.Font.Gotham
+    scriptText.TextXAlignment = Enum.TextXAlignment.Left
+    scriptText.BackgroundTransparency = 1
+    scriptText.Parent = scriptFrame
+    
+    local executeButton = Instance.new("TextButton")
+    executeButton.Name = "ExecuteButton"
+    executeButton.Size = UDim2.new(0.25, 0, 0.7, 0)
+    executeButton.Position = UDim2.new(0.72, 0, 0.15, 0)
+    executeButton.Text = "执行"
+    executeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    executeButton.Font = Enum.Font.GothamBold
+    executeButton.BackgroundColor3 = Color3.fromRGB(0, 150, 200)
+    executeButton.Parent = scriptFrame
+end
+
+-- 更新第一个选项卡的CanvasSize
+tabFrames[1].CanvasSize = UDim2.new(0, 0, 0, #scriptOptions * 60)
+
+-- 按钮交互逻辑
+local isExpanded = false
+
+iconButton.MouseButton1Click:Connect(function()
+    isExpanded = not isExpanded
+    mainFrame.Visible = isExpanded
+    iconButton.Visible = not isExpanded
+end)
+
+closeButton.MouseButton1Click:Connect(function()
+    isExpanded = false
+    mainFrame.Visible = false
+    iconButton.Visible = true
+end)
