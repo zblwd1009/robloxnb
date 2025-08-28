@@ -1,0 +1,8 @@
+local OrionLib = loadstring(game:HttpGet('https://pastebin.com/raw/xLRUSiKx'))()local Window = OrionLib:MakeWindow({Name = "无力脚本", HidePremium = false, SaveConfig = true,IntroText = "无力nb", ConfigFolder = "nb"})local Tab = Window:MakeTab({    Name = "自动锻炼",	Icon = "rbxassetid://4483345998",	PremiumOnly = false})
+Tab:AddButton({	Name = "1",	Callback = function()while true do
+local args = {
+	"rep"
+}
+game:GetService("Players").LocalPlayer:WaitForChild("muscleEvent"):FireServer(unpack(args))
+wait(0.5)
+end})    
